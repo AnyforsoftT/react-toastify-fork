@@ -334,6 +334,7 @@ export interface Toast {
   removalReason?: true | undefined;
   isActive: boolean;
   staleId?: Id;
+  originalAutoClose?: number | false;
 }
 
 export type ToastItemStatus = 'added' | 'removed' | 'updated';

@@ -73,6 +73,13 @@ export function createContainerObserver(
       const t = toasts.get(id);
       if (t) markAsRemoved(t);
     }
+    const toastsArray = Array.from(toasts.values());
+    if (toastsArray.length > 0) {
+      const nextInFocus = toastsArray[toastsArray.length - 2];
+      if (nextInFocus) {
+        nextInFocus.props.autoClose = nextInFocus.originalAutoClose;
+      }
+    }
     notify();
   };
 
@@ -92,21 +99,27 @@ export function createContainerObserver(
     const arr = Array.from(toasts.values());
 
     if (arr.length === 2) {
-      const [active, notActive] = arr;
+      const [inFocus, notInFocus] = arr;
       toasts.clear();
-      toasts.set(notActive.props.toastId, notActive);
-      toasts.set(active.props.toastId, active);
+      toasts.set(notInFocus.props.toastId, notInFocus);
+      toasts.set(inFocus.props.toastId, inFocus);
+    } else if (arr.length === 1) {
+      const [inFocus] = arr;
+      toasts.set(inFocus.props.toastId, {
+        ...inFocus,
+        props: { ...inFocus.props, autoClose: inFocus.originalAutoClose }
+      });
     } else if (arr.length > 1) {
       const preLast = arr[arr.length - 2];
       const last = arr[arr.length - 1];
       const rest = arr.slice(0, arr.length - 2);
-      const active = preLast;
+      const inFocus = preLast;
       const updatedRest = [...rest, last];
       const sortedRest = sortByPriorityThenTime(updatedRest);
 
       toasts.clear();
       sortedRest.forEach(t => toasts.set(t.props.toastId, t));
-      toasts.set(active.props.toastId, active);
+      toasts.set(inFocus.props.toastId, inFocus);
     }
 
     notify();
@@ -124,6 +137,7 @@ export function createContainerObserver(
 
     if (isNotAnUpdate) toastCount++;
 
+    const computedAutoClose = options.isLoading ? false : getAutoCloseDelay(options.autoClose, props.autoClose);
     const toastProps = {
       ...props,
       style: props.toastStyle,
@@ -135,7 +149,7 @@ export function createContainerObserver(
       isIn: false,
       className: parseClassName(options.className || props.toastClassName),
       progressClassName: parseClassName(options.progressClassName || props.progressClassName),
-      autoClose: options.isLoading ? false : getAutoCloseDelay(options.autoClose, props.autoClose),
+      autoClose: false,
       closeToast(reason?: true) {
         toasts.get(toastId)!.removalReason = reason;
         removeToast(toastId);
@@ -152,7 +166,7 @@ export function createContainerObserver(
         if (toastCount < 0) toastCount = 0;
 
         if (queue.length > 0) {
-          addActiveToast(queue.shift());
+          addActiveToast(queue.shift()!);
           return;
         }
 
@@ -171,10 +185,10 @@ export function createContainerObserver(
     const activeToast = {
       content,
       props: toastProps,
-      staleId
-    } as Toast;
+      staleId,
+      originalAutoClose: computedAutoClose
+    } as Toast & { originalAutoClose: number | false };
 
-    // not handling limit + delay by design. Waiting for user feedback first
     if (props.limit && props.limit > 0 && toastCount > props.limit && isNotAnUpdate) {
       queue.push(activeToast);
     } else if (isNum(delay)) {

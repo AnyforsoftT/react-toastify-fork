@@ -13,6 +13,18 @@ type Notify = () => void;
 
 export type ContainerObserver = ReturnType<typeof createContainerObserver>;
 
+const sortByPriorityThenTime = (array: Toast[]) => {
+  return [...array].sort((a, b) => {
+    const pa = a.props.data?.priority ?? 999;
+    const pb = b.props.data?.priority ?? 999;
+    if (pa !== pb) return pb - pa;
+
+    const ta = a.props.data?.timestamp ?? 0;
+    const tb = b.props.data?.timestamp ?? 0;
+    return tb - ta;
+  });
+};
+
 export function createContainerObserver(
   id: Id,
   containerProps: ToastContainerProps,
@@ -75,8 +87,28 @@ export function createContainerObserver(
 
     if (toast.staleId) toasts.delete(toast.staleId);
     toast.isActive = true;
-
     toasts.set(toastId, toast);
+
+    const arr = Array.from(toasts.values());
+
+    if (arr.length === 2) {
+      const [active, notActive] = arr;
+      toasts.clear();
+      toasts.set(notActive.props.toastId, notActive);
+      toasts.set(active.props.toastId, active);
+    } else if (arr.length > 1) {
+      const preLast = arr[arr.length - 2];
+      const last = arr[arr.length - 1];
+      const rest = arr.slice(0, arr.length - 2);
+      const active = preLast;
+      const updatedRest = [...rest, last];
+      const sortedRest = sortByPriorityThenTime(updatedRest);
+
+      toasts.clear();
+      sortedRest.forEach(t => toasts.set(t.props.toastId, t));
+      toasts.set(active.props.toastId, active);
+    }
+
     notify();
     dispatchChanges(toToastItem(toast, isNew ? 'added' : 'updated'));
 

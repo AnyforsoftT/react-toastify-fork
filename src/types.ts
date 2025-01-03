@@ -161,7 +161,7 @@ interface CommonOptions {
   customProgressBar?: boolean;
 }
 
-export interface ToastOptions<Data = unknown> extends CommonOptions {
+export interface ToastOptions<Data = { priority?: number; timestamp?: number }> extends CommonOptions {
   /**
    * An optional css class to set.
    */
@@ -171,6 +171,10 @@ export interface ToastOptions<Data = unknown> extends CommonOptions {
    * Called when toast is mounted.
    */
   onOpen?: () => void;
+
+  priority?: number;
+
+  timestamp?: number;
 
   /**
    * Called when toast is unmounted.

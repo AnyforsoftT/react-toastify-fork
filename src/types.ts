@@ -246,6 +246,8 @@ export interface ToastContainerProps extends CommonOptions, Pick<HTMLAttributes<
    */
   stacked?: boolean;
 
+  withCollapseEffect?: boolean;
+
   /**
    * Whether or not to display the newest toast on top.
    * `Default: false`

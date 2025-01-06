@@ -16,6 +16,7 @@ export const defaultProps: ToastContainerProps = {
   closeButton: true,
   pauseOnHover: true,
   pauseOnFocusLoss: true,
+  withCollapseEffect: false,
   draggable: 'touch',
   draggablePercent: Default.DRAGGABLE_PERCENT as number,
   draggableDirection: Direction.X,
@@ -31,6 +32,7 @@ export function ToastContainer(props: ToastContainerProps) {
     ...props
   };
   const stacked = props.stacked;
+  const withCollapseEffect = props.withCollapseEffect;
   const [collapsed, setIsCollapsed] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const { getToastToRender, isToastActive, count } = useToastContainer(containerProps);
@@ -115,7 +117,7 @@ export function ToastContainer(props: ToastContainerProps) {
       className={Default.CSS_NAMESPACE as string}
       id={containerId as string}
       onMouseEnter={() => {
-        if (stacked) {
+        if (stacked && withCollapseEffect) {
           setIsCollapsed(false);
           toast.pause();
         }

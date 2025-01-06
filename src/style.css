@@ -20,12 +20,12 @@
   --toastify-toast-left: max(var(--toastify-toast-offset), env(safe-area-inset-left));
   --toastify-toast-bottom: max(var(--toastify-toast-offset), env(safe-area-inset-bottom));
   --toastify-toast-background: #fff;
-  --toastify-toast-padding: 14px;
-  --toastify-toast-min-height: 64px;
+  --toastify-toast-padding: 16px;
+  --toastify-toast-min-height: 143px;
   --toastify-toast-max-height: 800px;
-  --toastify-toast-bd-radius: 6px;
+  --toastify-toast-bd-radius: 10px;
   --toastify-toast-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  --toastify-font-family: sans-serif;
+  --toastify-font-family: 'FigtreeVF';
   --toastify-z-index: 9999;
   --toastify-text-color-light: #757575;
   --toastify-text-color-dark: #fff;
@@ -38,8 +38,8 @@
 
   --toastify-spinner-color: #616161;
   --toastify-spinner-color-empty-area: #e0e0e0;
-  --toastify-color-progress-light: linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #34aadc, #5856d6, #ff2d55);
-  --toastify-color-progress-dark: #bb86fc;
+  --toastify-color-progress-light: rgba(74, 93, 188, 0.5);
+  --toastify-color-progress-dark: #4a5dbc;
   --toastify-color-progress-info: var(--toastify-color-info);
   --toastify-color-progress-success: var(--toastify-color-success);
   --toastify-color-progress-warning: var(--toastify-color-warning);
@@ -57,6 +57,7 @@
   color: #fff;
   display: flex;
   flex-direction: column;
+  align-items: baseline;
 }
 
 .Toastify__toast-container--top-left {
@@ -126,17 +127,21 @@
   width: var(--toastify-toast-width);
   min-height: var(--toastify-toast-min-height);
   box-sizing: border-box;
-  padding: var(--toastify-toast-padding);
+  padding: 16px 46px 16px 16px;
   border-radius: var(--toastify-toast-bd-radius);
   box-shadow: var(--toastify-toast-shadow);
   max-height: var(--toastify-toast-max-height);
   font-family: var(--toastify-font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  color: black;
+  font-weight: 400;
   /* webkit only issue #791 */
   z-index: 0;
   /* inner swag */
   display: flex;
   flex: 1 auto;
-  align-items: center;
+  align-items: normal;
   word-break: break-word;
 }
 
@@ -158,10 +163,6 @@
 
 .Toastify__toast--stacked[data-collapsed='false'] {
   overflow: visible;
-}
-
-.Toastify__toast--stacked[data-collapsed='true']:not(:last-child) > * {
-  opacity: 0;
 }
 
 .Toastify__toast--stacked:after {
@@ -209,7 +210,8 @@
 }
 
 .Toastify__toast-icon {
-  margin-inline-end: 10px;
+  align-self: baseline;
+  margin-inline-end: 12px;
   width: 22px;
   flex-shrink: 0;
   display: flex;
@@ -294,14 +296,13 @@
 .Toastify__close-button {
   color: #fff;
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 16px;
+  right: 16px;
   background: transparent;
   outline: none;
   border: none;
   padding: 0;
   cursor: pointer;
-  opacity: 0.7;
   transition: 0.3s ease;
   z-index: 1;
 }
@@ -313,18 +314,17 @@
 
 .Toastify__close-button--light {
   color: #000;
-  opacity: 0.3;
 }
 
 .Toastify__close-button > svg {
-  fill: currentColor;
-  height: 16px;
-  width: 14px;
+  fill: #4a5dbc;
+  height: 18px;
+  width: 18px;
 }
 
 .Toastify__close-button:hover,
 .Toastify__close-button:focus {
-  opacity: 1;
+  opacity: 0.75;
 }
 
 @keyframes Toastify__trackProgress {
@@ -368,7 +368,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 5px;
+  height: 6px;
   border-bottom-left-radius: var(--toastify-toast-bd-radius);
   border-bottom-right-radius: var(--toastify-toast-bd-radius);
 }
@@ -667,21 +667,21 @@
 
 @keyframes Toastify__slideInRight {
   from {
-    transform: translate3d(100%, var(--y), 0);
+    transform: translate3d(100%, var(--y), 0) scale(var(--s));
     visibility: visible;
   }
   to {
-    transform: translate3d(0, var(--y), 0);
+    transform: translate3d(0, var(--y), 0) scale(var(--s));
   }
 }
 
 @keyframes Toastify__slideInLeft {
   from {
-    transform: translate3d(-100%, var(--y), 0);
+    transform: translate3d(-100%, var(--y), 0) scale(var(--s));
     visibility: visible;
   }
   to {
-    transform: translate3d(0, var(--y), 0);
+    transform: translate3d(0, var(--y), 0) scale(var(--s));
   }
 }
 

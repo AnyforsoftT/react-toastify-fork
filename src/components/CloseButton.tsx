@@ -20,11 +20,9 @@ export function CloseButton({ closeToast, theme, ariaLabel = 'close' }: CloseBut
       }}
       aria-label={ariaLabel}
     >
-      <svg aria-hidden="true" viewBox="0 0 14 16">
-        <path
-          fillRule="evenodd"
-          d="M7.71 8.23l3.75 3.75-1.48 1.48-3.75-3.75-3.75 3.75L1 11.98l3.75-3.75L1 4.48 2.48 3l3.75 3.75L9.98 3l1.48 1.48-3.75 3.75z"
-        />
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 4L4.00066 13.9993" stroke="#4A5DBC" strokeWidth="2" />
+        <path d="M14 14L4.00066 4.00066" stroke="#4A5DBC" strokeWidth="2" />
       </svg>
     </button>
   );

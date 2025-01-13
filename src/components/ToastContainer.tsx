@@ -60,6 +60,25 @@ export function ToastContainer(props: ToastContainerProps) {
     }
   }
 
+  const [winSizeTick, setWinSizeTick] = useState(0);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    function onResize() {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        setWinSizeTick(t => t + 1);
+      }, 0);
+    }
+
+    window.addEventListener('resize', onResize);
+    return () => {
+      if (timer) clearTimeout(timer);
+      window.removeEventListener('resize', onResize);
+    };
+  }, []);
+
   useIsomorphicLayoutEffect(() => {
     if (stacked) {
       const nodes = containerRef.current!.querySelectorAll('[data-in="true"]');
@@ -78,7 +97,7 @@ export function ToastContainer(props: ToastContainerProps) {
 
           if (!node.dataset.pos) node.dataset.pos = isTop ? 'top' : 'bot';
 
-          const y = usedHeight * (collapsed ? 0.2 : 1) + (collapsed ? 0 : gap * i);
+          const y = usedHeight * (collapsed ? 0.06 : 1) + (collapsed ? 0 : gap * i);
 
           node.style.setProperty('--y', `${isTop ? y : y * -1}px`);
           node.style.setProperty('--g', `${gap}`);
@@ -88,7 +107,7 @@ export function ToastContainer(props: ToastContainerProps) {
           prevS += 0.025;
         });
     }
-  }, [collapsed, count, stacked]);
+  }, [collapsed, count, stacked, winSizeTick]);
 
   useEffect(() => {
     function focusFirst(e: KeyboardEvent) {
@@ -145,6 +164,7 @@ export function ToastContainer(props: ToastContainerProps) {
               return (
                 <Toast
                   {...toastProps}
+                  draggable={props.draggable}
                   stacked={stacked}
                   collapseAll={collapseAll}
                   isIn={isToastActive(toastProps.toastId, toastProps.containerId)}

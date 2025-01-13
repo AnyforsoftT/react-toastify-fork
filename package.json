@@ -18,7 +18,7 @@
     "addons"
   ],
   "scripts": {
-    "prepare": "lefthook install",
+    "prepare": "npm run build",
     "setup": "pnpm link .",
     "start": "cd playground && pnpm dev",
     "test": "cypress open --component",

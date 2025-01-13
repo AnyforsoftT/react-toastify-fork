@@ -8,7 +8,7 @@ import {
   ToastItem,
   ToastOptions
 } from '../types';
-import { Default, canBeRendered, isId } from '../utils';
+import { canBeRendered, Default, isId } from '../utils';
 import { ContainerObserver, createContainerObserver } from './containerObserver';
 
 interface EnqueuedToast {
@@ -21,7 +21,7 @@ interface RemoveParams {
   containerId: Id;
 }
 
-const containers = new Map<Id, ContainerObserver>();
+export const containers = new Map<Id, ContainerObserver>();
 let renderQueue: EnqueuedToast[] = [];
 const listeners = new Set<OnChangeCallback>();
 
@@ -110,6 +110,8 @@ export function toggleToast(v: boolean, opt?: ToggleToastParams) {
   });
 }
 
+let previousToasts = [];
+
 export function registerContainer(props: ToastContainerProps) {
   const id = props.containerId || Default.CONTAINER_ID;
   return {
@@ -117,10 +119,30 @@ export function registerContainer(props: ToastContainerProps) {
       const container = createContainerObserver(id, props, dispatchChanges);
 
       containers.set(id, container);
+
       const unobserve = container.observe(notify);
+
+      containers.forEach(container => {
+        previousToasts.forEach(item => {
+          container.buildToast(item.content, { ...item.options, position: container.props.position });
+        });
+      });
+
       flushRenderQueue();
 
       return () => {
+        previousToasts = Array.from(container.toasts.values())
+          .reverse()
+          .map(toast => {
+            return {
+              content: toast.content,
+              options: {
+                ...toast.props,
+                closeToast: undefined,
+                deleteToast: undefined
+              }
+            };
+          });
         unobserve();
         containers.delete(id);
       };

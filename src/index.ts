@@ -5,6 +5,7 @@ export { ToastContainer, Bounce, Flip, Slide, Zoom, Icons } from './components';
 export type { IconProps, CloseButton } from './components';
 export type { ToastPromiseParams } from './core';
 export { toast } from './core';
+export { containers } from './core/store';
 export type {
   TypeOptions,
   Theme,

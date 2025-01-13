@@ -137,18 +137,18 @@ export function createContainerObserver(
 
     if (isNotAnUpdate) toastCount++;
 
-    const computedAutoClose = options.isLoading ? false : getAutoCloseDelay(options.autoClose, props.autoClose);
+    const computedAutoClose = options.isLoading ? false : props.autoClose;
     const toastProps = {
       ...props,
+      ...Object.fromEntries(Object.entries(options).filter(([_, v]) => v != null)),
       style: props.toastStyle,
       key: toastKey++,
-      ...Object.fromEntries(Object.entries(options).filter(([_, v]) => v != null)),
       toastId,
       updateId,
       data,
       isIn: false,
-      className: parseClassName(options.className || props.toastClassName),
-      progressClassName: parseClassName(options.progressClassName || props.progressClassName),
+      className: parseClassName(props.toastClassName),
+      progressClassName: parseClassName(props.progressClassName),
       autoClose: false,
       closeToast(reason?: true) {
         toasts.get(toastId)!.removalReason = reason;
@@ -198,6 +198,7 @@ export function createContainerObserver(
     } else {
       addActiveToast(activeToast);
     }
+    notify();
   };
 
   return {
@@ -206,7 +207,10 @@ export function createContainerObserver(
     observe,
     toggle,
     removeToast,
+    addActiveToast,
     toasts,
+    queue,
+    snapshot,
     clearQueue,
     buildToast,
     setProps(p: ToastContainerProps) {

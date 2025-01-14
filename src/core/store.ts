@@ -121,14 +121,14 @@ export function registerContainer(props: ToastContainerProps) {
       containers.set(id, container);
 
       const unobserve = container.observe(notify);
+      flushRenderQueue();
 
       containers.forEach(container => {
         previousToasts.forEach(item => {
           container.buildToast(item.content, { ...item.options, position: container.props.position });
+          renderQueue.push(item.content, { ...item.options, position: container.props.position });
         });
       });
-
-      flushRenderQueue();
 
       return () => {
         previousToasts = Array.from(container.toasts.values())

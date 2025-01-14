@@ -60,54 +60,51 @@ export function ToastContainer(props: ToastContainerProps) {
     }
   }
 
-  const [winSizeTick, setWinSizeTick] = useState(0);
+  const handleStacked = () => {
+    const nodes = containerRef.current!.querySelectorAll('[data-in="true"]');
+    const gap = 12;
+    const isTop = containerProps.position?.includes('top');
+    let usedHeight = 0;
+    let prevS = 0;
 
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | null = null;
+    Array.from(nodes)
+      .reverse()
+      .forEach((n, i) => {
+        const node = n as HTMLElement;
+        node.classList.add(`${Default.CSS_NAMESPACE}__toast--stacked`);
 
+        if (i > 0) node.dataset.collapsed = `${collapsed}`;
+
+        if (!node.dataset.pos) node.dataset.pos = isTop ? 'top' : 'bot';
+
+        const y = usedHeight * (collapsed ? 0.06 : 1) + (collapsed ? 0 : gap * i);
+
+        node.style.setProperty('--y', `${isTop ? y : y * -1}px`);
+        node.style.setProperty('--g', `${gap}`);
+        node.style.setProperty('--s', `${1 - (collapsed ? prevS : 0)}`);
+
+        usedHeight += node.offsetHeight;
+        prevS += 0.025;
+      });
+  };
+
+  useIsomorphicLayoutEffect(() => {
     function onResize() {
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        setWinSizeTick(t => t + 1);
-      }, 0);
+      handleStacked();
     }
-
     window.addEventListener('resize', onResize);
     return () => {
-      if (timer) clearTimeout(timer);
       window.removeEventListener('resize', onResize);
     };
   }, []);
 
   useIsomorphicLayoutEffect(() => {
-    if (stacked) {
-      const nodes = containerRef.current!.querySelectorAll('[data-in="true"]');
-      const gap = 12;
-      const isTop = containerProps.position?.includes('top');
-      let usedHeight = 0;
-      let prevS = 0;
-
-      Array.from(nodes)
-        .reverse()
-        .forEach((n, i) => {
-          const node = n as HTMLElement;
-          node.classList.add(`${Default.CSS_NAMESPACE}__toast--stacked`);
-
-          if (i > 0) node.dataset.collapsed = `${collapsed}`;
-
-          if (!node.dataset.pos) node.dataset.pos = isTop ? 'top' : 'bot';
-
-          const y = usedHeight * (collapsed ? 0.06 : 1) + (collapsed ? 0 : gap * i);
-
-          node.style.setProperty('--y', `${isTop ? y : y * -1}px`);
-          node.style.setProperty('--g', `${gap}`);
-          node.style.setProperty('--s', `${1 - (collapsed ? prevS : 0)}`);
-
-          usedHeight += node.offsetHeight;
-          prevS += 0.025;
-        });
-    }
-  }, [collapsed, count, stacked, winSizeTick]);
+    handleStacked();
+    setTimeout(() => {
+      console.log('timeout handle stucked');
+      handleStacked();
+    }, 0);
+  }, [collapsed, count]);
 
   useEffect(() => {
     function focusFirst(e: KeyboardEvent) {

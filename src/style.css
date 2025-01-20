@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'Figtree';
+  src: url('src/assets/Figtree/Figtree-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Figtree';
+  src: url('src/assets/Figtree/Figtree-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   --toastify-color-light: #fff;
   --toastify-color-dark: #121212;
@@ -25,7 +41,7 @@
   --toastify-toast-max-height: 800px;
   --toastify-toast-bd-radius: 10px;
   --toastify-toast-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  --toastify-font-family: 'FigtreeVF';
+  --toastify-font-family: 'Figtree', sans-serif;
   --toastify-z-index: 9999;
   --toastify-text-color-light: #757575;
   --toastify-text-color-dark: #fff;

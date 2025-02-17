@@ -27,7 +27,7 @@
   --toastify-toast-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   --toastify-font-family: 'Figtree', sans-serif;
   --toastify-z-index: 9999;
-  --toastify-text-color-light: black;
+  --toastify-text-color-light: black !important;
   --toastify-text-color-dark: #fff;
 
   /* Used only for colored theme */

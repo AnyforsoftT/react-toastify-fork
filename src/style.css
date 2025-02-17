@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Figtree';
-  src: url('./assets/Figtree/Figtree-VariableFont_wght.ttf') format('truetype');
+  src: url('./asset/Figtree/Figtree-VariableFont_wght.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: 'Figtree';
-  src: url('./assets/Figtree/Figtree-Italic-VariableFont_wght.ttf') format('truetype');
+  src: url('./asset/Figtree/Figtree-Italic-VariableFont_wght.ttf') format('truetype');
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;

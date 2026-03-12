@@ -131,7 +131,7 @@ interface CommonOptions {
   /**
    * Fired when clicking inside toaster
    */
-  onClick?: (event: React.MouseEvent) => void;
+  onClick?: (event: React.SyntheticEvent) => void;
 
   /**
    * Support right to left display.
